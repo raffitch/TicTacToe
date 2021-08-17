@@ -58,15 +58,16 @@ def initiate_new_game():
     default_moves = np.array([10, 10, 10, 10, 10, 10, 10, 10, 10])
     if game_turn == computer:
         print("Computer won so it starts the game!")
-        bot(default_moves)
+        play_game(default_moves)
     elif game_turn == human:
         print(f"{human_player}, you won, start the new game!")
+        print_grid(default_moves)
         try_human_move(default_moves)
     else:
         turn = random.choice([computer, human])
         if turn == computer:
             print(f"Computer starts the game")
-            bot(default_moves)
+            play_game(default_moves)
         else:
             try_human_move(default_moves)
 
@@ -76,7 +77,11 @@ def try_human_move(played_moves):
         played_cell_nbr = int(input("Type in the cell number and press enter:"))
         if 0 < played_cell_nbr <= 9:
             if played_moves[played_cell_nbr - 1] == 10:
-                play_game(played_moves, played_cell_nbr)
+                try:
+                    played_moves[played_cell_nbr - 1] = human
+                except IndexError:
+                    print("wtf")
+                play_game(played_moves)
             else:
                 print(f"{human_player} that cell is taken, please try again!")
                 try_human_move(played_moves)
@@ -89,18 +94,7 @@ def try_human_move(played_moves):
         try_human_move(played_moves)
 
 
-def play_game(played_moves, played_cell_nbr):
-    played_moves[played_cell_nbr - 1] = human
-    print_grid(played_moves)
-    while check_winners(played_moves) is False:
-        bot(played_moves)
-    else:
-        score()
-        print(f"Let's play again {human_player}!")
-        initiate_new_game()
-
-
-def bot(played_moves):
+def play_game(played_moves):
     played_moves[random.choice(np.argwhere(played_moves == 10))] = computer
     print_grid(played_moves)
     while check_winners(played_moves) is False:
