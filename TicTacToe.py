@@ -77,10 +77,7 @@ def try_human_move(played_moves):
         played_cell_nbr = int(input("Type in the cell number and press enter:"))
         if 0 < played_cell_nbr <= 9:
             if played_moves[played_cell_nbr - 1] == 10:
-                try:
-                    played_moves[played_cell_nbr - 1] = human
-                except IndexError:
-                    print("wtf")
+                played_moves[played_cell_nbr - 1] = human
                 play_game(played_moves)
             else:
                 print(f"{human_player} that cell is taken, please try again!")
