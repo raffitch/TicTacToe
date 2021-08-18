@@ -4,8 +4,7 @@ import numpy as np
 human = 1
 computer = 0
 human_player = ""
-
-game_turn = 10
+game_turn = 999
 played_moves = np.array([10, 10, 10, 10, 10, 10, 10, 10, 10])
 default_cell_values = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
@@ -112,7 +111,6 @@ def check_winners():
     y = np.sum(reshaped, axis=1)
     diag1 = np.sum(np.diagonal(reshaped))
     diag2 = np.sum(np.fliplr(reshaped).diagonal())
-
     if np.any(x == 0) or np.any(y == 0) or diag1 == 0 or diag2 == 0:
         print("The computer has won!")
         score(0, 1)
@@ -125,7 +123,7 @@ def check_winners():
         return True
     elif 10 not in played_moves:
         print("It's a Draw!")
-        game_turn = 10
+        game_turn = 999
         return True
     else:
         print(f"It's your turn {human_player}")
