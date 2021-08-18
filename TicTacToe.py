@@ -44,7 +44,6 @@ def score(score_x, score_o):
 
 def player_info():
     global human_player
-
     print("Welcome to Tic-Tac-toe")
     print_grid(default_cell_values)
     human_player = input("At your turn type in a cell number 1 to 9 "
@@ -69,6 +68,7 @@ def initiate_new_game():
             print(f"Computer starts the game")
             play_game()
         else:
+            print_grid(played_moves)
             try_human_move()
 
 
@@ -96,7 +96,7 @@ def try_human_move():
 
 
 def play_game():
-    played_moves[random.choice(np.argwhere(played_moves == 10))] = computer
+    played_moves[random.choice(np.argwhere(played_moves == 10))[0]] = computer
     print_grid(played_moves)
     while check_winners() is False:
         try_human_move()
@@ -124,8 +124,9 @@ def check_winners():
         game_turn = human
         return True
     elif 10 not in played_moves:
-        game_turn = 10
         print("It's a Draw!")
+        game_turn = 10
+        return True
     else:
         print(f"It's your turn {human_player}")
         return False
