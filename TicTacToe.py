@@ -9,24 +9,24 @@ score_o = 0
 game_turn = 10
 
 
-def print_grid(values):
-    if type(values) is not list:
-        values = values.astype('str')
-        values[values == '10'] = ""
-        values[values == '0'] = "O"
-        values[values == '1'] = "X"
+def print_grid(grid):
+    if type(grid) is not list:
+        grid = grid.astype('str')
+        grid[grid == '10'] = ""
+        grid[grid == '0'] = "O"
+        grid[grid == '1'] = "X"
 
     print("\t     |     |")
-    print(f"\t  {values[0]}  |  {values[1]}  |  {values[2]}")
+    print(f"\t  {grid[0]}  |  {grid[1]}  |  {grid[2]}")
     print('\t_____|_____|_____')
 
     print("\t     |     |")
-    print(f"\t  {values[3]}  |  {values[4]}  |  {values[5]}")
+    print(f"\t  {grid[3]}  |  {grid[4]}  |  {grid[5]}")
     print('\t_____|_____|_____')
 
     print("\t     |     |")
 
-    print(f"\t  {values[6]}  |  {values[7]}  |  {values[8]}")
+    print(f"\t  {grid[6]}  |  {grid[7]}  |  {grid[8]}")
     print("\t     |     |")
 
 
@@ -43,7 +43,7 @@ def score():
 
 
 def player_info():
-    global human_player
+    #global human_player
     default_cell_values = [1, 2, 3, 4, 5, 6, 7, 8, 9]
     print("Welcome to Tic-Tac-toe")
     print_grid(default_cell_values)
@@ -92,7 +92,10 @@ def try_human_move(played_moves):
 
 
 def play_game(played_moves):
-    played_moves[random.choice(np.argwhere(played_moves == 10))] = computer
+    try:
+        played_moves[random.choice(np.argwhere(played_moves == 10))] = computer
+    except IndexError:
+        print("oops!")
     print_grid(played_moves)
     while check_winners(played_moves) is False:
         try_human_move(played_moves)
