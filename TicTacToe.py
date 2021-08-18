@@ -65,7 +65,7 @@ def initiate_new_game():
         turn = random.choice([computer, human])
         if turn == computer:
             print(f"Computer starts the game")
-            play_game()
+            bot()
         else:
             print_grid(played_moves)
             try_human_move()
@@ -81,7 +81,7 @@ def try_human_move():
         if 0 < played_cell_nbr <= 9:
             if played_moves[played_cell_nbr - 1] == 10:
                 played_moves[played_cell_nbr - 1] = human
-                play_game()
+                bot()
             else:
                 print(f"{human_player} that cell is taken, please try again!")
                 try_human_move()
@@ -95,13 +95,17 @@ def try_human_move():
 
 
 def play_game():
-    played_moves[random.choice(np.argwhere(played_moves == 10))[0]] = computer
     print_grid(played_moves)
     while check_winners() is False:
         try_human_move()
     else:
         print(f"Let's play again! {human_player}")
         initiate_new_game()
+
+
+def bot():
+    played_moves[random.choice(np.argwhere(played_moves == 10))[0]] = computer
+    play_game()
 
 
 def check_winners():
