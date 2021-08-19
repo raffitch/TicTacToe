@@ -102,11 +102,59 @@ def play_game():
     initiate_new_game()
 
 
+# def bot():
+#     global game_turn
+#     played_moves[random.choice(np.argwhere(played_moves == 10))[0]] = computer
+#     game_turn = human
+#     play_game()
+
 def bot():
     global game_turn
-    played_moves[random.choice(np.argwhere(played_moves == 10))[0]] = computer
+    best_score = -800
+    best_move = 0
+    for i in range(0, played_moves.size):
+        if played_moves[i] == 10:
+            played_moves[i] = computer
+            ai_score = minimax(played_moves, 0, False)
+            played_moves[i] = 10
+            if ai_score > best_score:
+                best_score = ai_score
+                best_move = i
+
+    played_moves[best_move] = computer
     game_turn = human
     play_game()
+
+
+
+def minimax(played_moves, depth, is_maximizing):
+    if check_winner(played_moves) == computer:
+        return 1
+    elif check_winner(played_moves) == human:
+        return -1
+    elif check_winner(played_moves) == 999:
+        return 0
+
+    if is_maximizing:
+        best_score = -800
+        for i in range(0, played_moves.size):
+            if played_moves[i] == 10:
+                played_moves[i] = computer
+                ai_score = minimax(played_moves, depth + 1, False)
+                played_moves[i] = 10
+                if ai_score > best_score:
+                    best_score = ai_score
+        return best_score
+    else:
+        best_score = 800
+        for i in range(0, played_moves.size):
+            if played_moves[i] == 10:
+                played_moves[i] = human
+                ai_score = minimax(played_moves, depth + 1, True)
+                played_moves[i] = 10
+                if ai_score < best_score:
+                    best_score = ai_score
+        return best_score
 
 
 def check_winners():
@@ -132,6 +180,20 @@ def check_winners():
         return True
     else:
         return False
+
+
+def check_winner(moves):
+    reshaped1 = moves.reshape((3, 3))
+    x = np.sum(reshaped1, axis=0)
+    y = np.sum(reshaped1, axis=1)
+    diag1 = np.sum(np.diagonal(reshaped1))
+    diag2 = np.sum(np.fliplr(reshaped1).diagonal())
+    if np.any(x == 0) or np.any(y == 0) or diag1 == 0 or diag2 == 0:
+        return computer
+    elif np.any(x == 3) or np.any(y == 3) or diag1 == 3 or diag2 == 3:
+        return human
+    elif 10 not in moves:
+        return 999
 
 
 player_info()
