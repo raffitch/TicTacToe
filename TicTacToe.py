@@ -102,56 +102,52 @@ def play_game():
     initiate_new_game()
 
 
-# def bot():
-#     global game_turn
-#     played_moves[random.choice(np.argwhere(played_moves == 10))[0]] = computer
-#     game_turn = human
-#     play_game()
-
 def bot():
     global game_turn
     best_score = -800
     best_move = 0
-    for i in range(0, played_moves.size):
-        if played_moves[i] == 10:
-            played_moves[i] = computer
-            ai_score = minimax(played_moves, 0, False)
-            played_moves[i] = 10
-            if ai_score > best_score:
-                best_score = ai_score
-                best_move = i
+    if np.all(played_moves == 10):
+        played_moves[random.choice(np.argwhere(played_moves == 10))[0]] = computer
+    else:
+        for i in range(0, played_moves.size):
+            if played_moves[i] == 10:
+                played_moves[i] = computer
+                ai_score = ai(played_moves, 0, False)
+                played_moves[i] = 10
+                if ai_score > best_score:
+                    best_score = ai_score
+                    best_move = i
 
-    played_moves[best_move] = computer
+        played_moves[best_move] = computer
     game_turn = human
     play_game()
 
 
-
-def minimax(played_moves, depth, is_maximizing):
-    if check_winner(played_moves) == computer:
+def ai(ai_moves, depth, is_maximizing):
+    if check_winner(ai_moves) == computer:
         return 1
-    elif check_winner(played_moves) == human:
+    elif check_winner(ai_moves) == human:
         return -1
-    elif check_winner(played_moves) == 999:
+    elif check_winner(ai_moves) == 999:
         return 0
 
     if is_maximizing:
         best_score = -800
-        for i in range(0, played_moves.size):
-            if played_moves[i] == 10:
-                played_moves[i] = computer
-                ai_score = minimax(played_moves, depth + 1, False)
-                played_moves[i] = 10
+        for i in range(0, ai_moves.size):
+            if ai_moves[i] == 10:
+                ai_moves[i] = computer
+                ai_score = ai(ai_moves, depth + 1, False)
+                ai_moves[i] = 10
                 if ai_score > best_score:
                     best_score = ai_score
         return best_score
     else:
         best_score = 800
-        for i in range(0, played_moves.size):
-            if played_moves[i] == 10:
-                played_moves[i] = human
-                ai_score = minimax(played_moves, depth + 1, True)
-                played_moves[i] = 10
+        for i in range(0, ai_moves.size):
+            if ai_moves[i] == 10:
+                ai_moves[i] = human
+                ai_score = ai(ai_moves, depth + 1, True)
+                ai_moves[i] = 10
                 if ai_score < best_score:
                     best_score = ai_score
         return best_score
