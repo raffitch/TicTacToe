@@ -33,21 +33,28 @@
 # Will Run
 # Already initiated
 import numpy as np
+computer = True
+human= False
+draw= True
+checkvalue = 0
+def test(value, value2):
 
-board = np.array([1,0,1,
-                  1,1,0,
-                  0,1,0])
+    global checkvalue
+    if value:
+        return 1
+    elif value == 2:
+        return -1
+    elif value == 3:
+        return 0
 
-def check_winner(moves):
-    reshaped1 = moves.reshape((3, 3))
-    x = np.sum(reshaped1, axis=0)
-    y = np.sum(reshaped1, axis=1)
-    diag1 = np.sum(np.diagonal(reshaped1))
-    diag2 = np.sum(np.fliplr(reshaped1).diagonal())
-    if np.any(x == 0) or np.any(y == 0) or diag1 == 0 or diag2 == 0:
-        return 'computer'
-    elif np.any(x == 3) or np.any(y == 3) or diag1 == 3 or diag2 == 3:
-        return 'human'
-    elif 10 not in moves:
-        return 999
-print(check_winner(board))
+    if value2:
+        best_score = 800
+        checkvalue = best_score
+        return best_score
+    else:
+        best_score = -800
+        checkvalue = best_score
+        return best_score
+
+print(test(True,True))
+print(checkvalue)

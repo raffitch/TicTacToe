@@ -92,7 +92,7 @@ def try_human_move():
 
 
 def play_game():
-    while check_winners() is False:
+    while check_winners(played_moves, False) is False:
         if game_turn == computer:
             bot()
         else:
@@ -124,11 +124,11 @@ def bot():
 
 
 def ai(ai_moves, depth, is_maximizing):
-    if check_winner(ai_moves) == computer:
+    if check_winners(ai_moves, True) == computer:
         return 1
-    elif check_winner(ai_moves) == human:
+    elif check_winners(ai_moves, True) == human:
         return -1
-    elif check_winner(ai_moves) == 999:
+    elif check_winners(ai_moves, True) == 999:
         return 0
 
     if is_maximizing:
@@ -153,43 +153,38 @@ def ai(ai_moves, depth, is_maximizing):
         return best_score
 
 
-def check_winners():
+def check_winners(moves, simulation):
     global game_turn
-    reshaped = played_moves.reshape((3, 3))
+    reshaped = moves.reshape((3, 3))
     x = np.sum(reshaped, axis=0)
     y = np.sum(reshaped, axis=1)
     diag1 = np.sum(np.diagonal(reshaped))
     diag2 = np.sum(np.fliplr(reshaped).diagonal())
     if np.any(x == 0) or np.any(y == 0) or diag1 == 0 or diag2 == 0:
-        print("The computer has won!")
-        score(np.array([1, 0]))
-        game_turn = computer
-        return True
+        if simulation is False:
+            print("The computer has won!")
+            score(np.array([1, 0]))
+            game_turn = computer
+            return True
+        else:
+            return computer
     elif np.any(x == 3) or np.any(y == 3) or diag1 == 3 or diag2 == 3:
-        print(f"{human_player} has won!")
-        score(np.array([0, 1]))
-        game_turn = human
-        return True
-    elif 10 not in played_moves:
-        print("It's a Draw!")
-        game_turn = 999
-        return True
-    else:
-        return False
-
-
-def check_winner(moves):
-    reshaped1 = moves.reshape((3, 3))
-    x = np.sum(reshaped1, axis=0)
-    y = np.sum(reshaped1, axis=1)
-    diag1 = np.sum(np.diagonal(reshaped1))
-    diag2 = np.sum(np.fliplr(reshaped1).diagonal())
-    if np.any(x == 0) or np.any(y == 0) or diag1 == 0 or diag2 == 0:
-        return computer
-    elif np.any(x == 3) or np.any(y == 3) or diag1 == 3 or diag2 == 3:
-        return human
+        if simulation is False:
+            print(f"{human_player} has won!")
+            score(np.array([0, 1]))
+            game_turn = human
+            return True
+        else:
+            return human
     elif 10 not in moves:
-        return 999
+        if simulation is False:
+            print("It's a Draw!")
+            game_turn = 999
+            return True
+        else:
+            return 999
+    if simulation is False:
+        return False
 
 
 player_info()
