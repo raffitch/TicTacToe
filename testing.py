@@ -33,28 +33,10 @@
 # Will Run
 # Already initiated
 import numpy as np
-computer = True
-human= False
-draw= True
-checkvalue = 0
-def test(value, value2):
+import operator
 
-    global checkvalue
-    if value:
-        return 1
-    elif value == 2:
-        return -1
-    elif value == 3:
-        return 0
+def test(op):
+    return op(10, 20)
 
-    if value2:
-        best_score = 800
-        checkvalue = best_score
-        return best_score
-    else:
-        best_score = -800
-        checkvalue = best_score
-        return best_score
 
-print(test(True,True))
-print(checkvalue)
+print(test(operator.gt))
